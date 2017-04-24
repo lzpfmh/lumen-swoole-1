@@ -1,5 +1,5 @@
 <?php
-namespace jyj1993126\Commands;
+namespace jyj1993126\lumenswoole\Commands;
 
 use Illuminate\Console\Command;
 
@@ -28,6 +28,6 @@ class SwooleStart extends Command
 	 */
 	public function handle()
 	{
-		( new \jyj1993126\Wrappers\SwooleHttpWrapper )->run();
+		( new \jyj1993126\lumenswoole\Wrappers\SwooleHttpWrapper )->run();
 	}
 }

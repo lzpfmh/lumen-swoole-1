@@ -1,6 +1,6 @@
 <?php
 
-namespace jyj1993126\Wrappers;
+namespace jyj1993126\lumenswoole\Wrappers;
 
 use Illuminate\Http\Response as IlluminateResponse;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;

@@ -1,5 +1,5 @@
 {
-    "name": "jyj1993126/lumen-swoole",
+    "name": "jyj1993126/lumenswoole",
     "license": "MIT",
     "authors": [
         {
@@ -13,5 +13,10 @@
     },
     "require-dev": {
         "eaglewu/swoole-ide-helper": "dev-master"
+    },
+    "autoload": {
+        "psr-4": {
+            "jyj1993126\\lumenswoole\\":"./"
+        }
     }
 }

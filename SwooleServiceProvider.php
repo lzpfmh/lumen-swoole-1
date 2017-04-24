@@ -1,10 +1,10 @@
 <?php
 
-namespace jyj1993126;
+namespace jyj1993126\lumenswoole;
 
 use Illuminate\Support\ServiceProvider;
 
-class AppServiceProvider extends ServiceProvider
+class SwooleServiceProvider extends ServiceProvider
 {
     /**
      * Register any application services.
