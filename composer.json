@@ -1,0 +1,17 @@
+{
+    "name": "jyj1993126/lumen-swoole",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "leonJ",
+            "email": "jyj1993126@gmail.com"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {
+        "laravel/lumen-framework": "^5.4"
+    },
+    "require-dev": {
+        "eaglewu/swoole-ide-helper": "dev-master"
+    }
+}
