@@ -3,6 +3,8 @@
 namespace jyj1993126\lumenswoole\Wrappers;
 
 use Illuminate\Http\Response as IlluminateResponse;
+use jyj1993126\lumenswoole\Utils;
+use Monolog\Handler\Curl\Util;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 /**
@@ -15,13 +17,15 @@ class SwooleHttpWrapper
 	
 	/**
 	 * SwooleApplication constructor.
+	 * @param $host
+	 * @param $port
+	 * @param $configuration
 	 */
-	public function __construct()
+	public function __construct( $host, $port, $configuration )
 	{
-		$this->server = new \swoole_http_server(
-			config( 'swoole.host' , '127.0.0.1' ) , config( 'swoole.port' , 9050 )
-		);
+		$this->server = new \swoole_http_server( $host, $port );
 		$this->server->on( 'request' , [ $this , 'onRequest' ] );
+		$this->server->set( $configuration );
 	}
 	
 	public function run()
@@ -31,50 +35,13 @@ class SwooleHttpWrapper
 	
 	public function onRequest( \swoole_http_request $request , \swoole_http_response $response )
 	{
-		$this->ucHeaders( $request );
-		$illuminateRequest = $this->convertRequest( $request );
-		$illuminateResponse = app()->dispatch( $illuminateRequest );
+		Utils::ucHeaders( $request );
+		$illuminateRequest = Utils::convertRequest( $request );
+		$illuminateResponse = app()->handle( $illuminateRequest );
 		$this->handleResponse(
 			$response ,
 			$illuminateResponse ,
 			isset( $request->header['Accept-Encoding'] ) ? $request->header['Accept-Encoding'] : ''
-		);
-	}
-	
-	protected function ucHeaders( $request )
-	{
-		// merge headers into server which ar filted by swoole
-		// make a new array when php 7 has different behavior on foreach
-		$new_header = [];
-		$uc_header = [];
-		foreach( $request->header as $key => $value )
-		{
-			$new_header['http_' . $key] = $value;
-			$uc_header[ucwords( $key , '-' )] = $value;
-		}
-		$server = array_merge( $request->server , $new_header );
-		
-		// swoole has changed all keys to lower case
-		$server = array_change_key_case( $server , CASE_UPPER );
-		$request->server = $server;
-		$request->header = $uc_header;
-		return $request;
-	}
-	
-	protected function convertRequest( \swoole_http_request $request )
-	{
-		$get = isset( $request->get ) ? $request->get : [];
-		$post = isset( $request->post ) ? $request->post : [];
-		$cookie = isset( $request->cookie ) ? $request->cookie : [];
-		$server = isset( $request->server ) ? $request->server : [];
-		$header = isset( $request->header ) ? $request->header : [];
-		$files = isset( $request->files ) ? $request->files : [];
-		// $attr = isset($request->files) ? $request->files : [];
-		
-		$content = $request->rawContent() ?: null;
-		
-		return new \Illuminate\Http\Request(
-			$get , $post , []/* attributes */ , $cookie , $files , $server , $content
 		);
 	}
 	

@@ -28,6 +28,10 @@ class SwooleStart extends Command
 	 */
 	public function handle()
 	{
-		( new \jyj1993126\lumenswoole\Wrappers\SwooleHttpWrapper )->run();
+		$host = config( 'swoole.host' , '127.0.0.1' );
+		$port = config( 'swoole.port' , 9050 );
+		$configuration = config( 'swoole.configuration' , [] );
+		$this->info( "swoole is running at {$host}:{$port} " );
+		( new \jyj1993126\lumenswoole\Wrappers\SwooleHttpWrapper( $host , $port , $configuration ) )->run();
 	}
 }
